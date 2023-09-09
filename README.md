@@ -1,3 +1,12 @@
+https://youtu.be/c_-b_isI4vg?si=ELBUeI8H7oLSQaNe&t=2072
+
+Some things that I want to follow up on
+- automatically login when you sign up
+- switching email field name to phone number
+- Google Auth
+- be able to name buttons, right now this is kinda hacked together
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
