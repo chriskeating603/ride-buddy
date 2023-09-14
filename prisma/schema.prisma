@@ -22,9 +22,27 @@ model User {
   updatedAt DateTime @updatedAt
   // countryCode String
   // favoriteIds String[] @db.ObjectId
-  lists List[]
-  timeslots Timeslot[]
-  reservations Reservation[]
+  invite Invite[]
+  list List[]
+  timeslot Timeslot[]
+  reservation Reservation[]
+}
+
+model Invite {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  // phoneNumber String @unique // include with country code (without + sign) and area code
+  // phoneVerified DateTime? // verified on Twilio
+  // email String? @unique // include with country code (without + sign) and area code
+  userId String @db.ObjectId
+  name String?
+  phoneNumber String?
+  // image String?
+  // hashedPassword String? // not sure how to handle if user signs up with Google Auth
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // countryCode String
+  // favoriteIds String[] @db.ObjectId
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model List {
@@ -44,7 +62,7 @@ model List {
   // session_state String?
 // ????  @@unique([ provider, providerAccountId])
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  timeslots Timeslot[]
+  // timeslot Timeslot[]
   // listItems ListItem[]
 }
 
@@ -62,18 +80,20 @@ model List {
 model Timeslot {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId
-  listId String @db.ObjectId
+  // listId String @db.ObjectId
   createdAt DateTime @default(now())
   startTime DateTime
   endTime DateTime
-  category String
-  participantCount Int
-  title String
-  PricePerSlot Int
-  SlotLengthInMin Int
+  blockLength Int
+  phoneNumberList String
+  category String?
+  participantCount Int?
+  title String?
+  PricePerSlot Int?
+  // SlotLengthInMin Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade) 
-  list List @relation(fields: [listId], references: [id])
-  reservations Reservation []
+  // list List @relation(fields: [listId], references: [id])
+  reservation Reservation []
 }
 
 model Reservation {

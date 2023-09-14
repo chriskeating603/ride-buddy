@@ -11,6 +11,10 @@ import ToasterProvider from "./providers/ToasterProvider"
 import LoginModal from "./components/modals/LoginModal"
 import getCurrentUser from './actions/getCurrentUser.ts'
 import InviteBuddies from "./components/modals/InviteBuddiesModal.tsx"
+import Search from "./components/navbar/Search.tsx"
+import Dates from "./components/Calendar.tsx"
+import Timeslots from "./components/Timeslots.tsx"
+import TimeslotForm from "./components/TimeslotForm.tsx"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,27 +26,35 @@ export const metadata: Metadata = {
 const font = Nunito ({
   subsets: ['latin'],
 })
+
 export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const currentUser = await getCurrentUser()
-  // console.log(currentUser)
-  return (
-    <html lang="en">
-      <body className={font.className}>
-        <ClientOnly>
-          <ToasterProvider />
-          <InviteBuddies />
-          <LoginModal />
-          <RegisterModal />
-          {/* <Modal title="Hello World" actionLabel='Submit' secondaryActionLabel='Login' isOpen /> */}
-          <Navbar currentUser={currentUser}/>
-          {/* <Lists /> */}
-        </ClientOnly>
-      {children}
-      </body>
-    </html>
-  )
-}
+    children,
+  }: {
+    children: React.ReactNode
+  }) {
+    const currentUser = await getCurrentUser()
+    // console.log(currentUser)
+    return (
+      <html lang="en">
+        <body className={font.className}>
+          <ClientOnly>
+            <ToasterProvider />
+            <InviteBuddies />
+            <LoginModal />
+            <RegisterModal />
+            {/* <Modal title="Hello World" actionLabel='Submit' secondaryActionLabel='Login' isOpen /> */}
+            <Navbar currentUser={currentUser}/>
+            {/* <Lists /> */}
+          </ClientOnly>
+          <div className="
+          p-1">
+            {/* <Search /> */}
+            <TimeslotForm />
+            {/* <Dates />
+            <Timeslots /> */}
+            {/* {children} */}
+          </div>
+        </body>
+      </html>
+    )
+  }

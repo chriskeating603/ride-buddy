@@ -9,6 +9,10 @@ import { FieldValues, set, useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { SubmitHandler } from "react-hook-form";
+import { on } from "events";
+import { useRouter } from "next/navigation"; // not next/router
+import {sendSMS} from '@/app/utils/DEPRECATED_sendSMS';
+
 
 
 enum STEPS {
@@ -34,7 +38,52 @@ enum STEPS {
     //     }
     // })
 
+    // export default function Home() {
+    //     const [phoneNumber, setPhoneNumber] = useState('');
+    //     const [message, setMessage] = useState('');
+    //     const [response, setResponse] = useState('');
+      
+    //     const handleSendSMS = async () => {
+    //       try {
+    //         const response = await fetch('/api/send-sms', {
+    //           method: 'POST',
+    //           headers: {
+    //             'Content-Type': 'application/json',
+    //           },
+    //           body: JSON.stringify({ phoneNumber, message }),
+    //         });
+      
+    //         const data = await response.json();
+    //         setResponse(data.message);
+    //       } catch (error) {
+    //         console.error('Error sending SMS:', error);
+    //       }
+    //     };
+      
+        // return (
+        //   <div>
+        //     <h1>Send SMS</h1>
+        //     <input
+        //       type="text"
+        //       placeholder="Phone Number"
+        //       value={phoneNumber}
+        //       onChange={(e) => setPhoneNumber(e.target.value)}
+        //     />
+        //     <input
+        //       type="text"
+        //       placeholder="Message"
+        //       value={message}
+        //       onChange={(e) => setMessage(e.target.value)}
+        //     />
+        //     <button onClick={handleSendSMS}>Submit</button>
+        //     {response && <p>{response}</p>}
+        //   </div>
+        // );
+    //   }
+
+
 const inviteBuddiesModal = () => {
+    const router = useRouter()
     const inviteBuddiesModal = useInviteBuddiesModal();
     const [step, setStep] = useState(STEPS.FUNNY_NAME)
     const [isLoading, setIsLoading] = useState(false)
@@ -43,26 +92,14 @@ const inviteBuddiesModal = () => {
         register,
         handleSubmit,
         formState: { errors },
+        reset
     } = useForm<FieldValues>({
         defaultValues: {
             funnyName: '',
             phoneNumber: '',
         },
+    
     })
-
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        // console.log(data)
-        setIsLoading(true)
-        axios.post('/api/invite', data)
-        .then(() => {
-            toast.success("Invite successful!")
-            console.log(data)
-        }).catch((err) => {
-            toast.error("Please try again")
-        }).finally(() => { 
-            setIsLoading(false)
-        })
-    }
 
     const onBack = () => {
         setStep((value) => value - 1)
@@ -74,6 +111,28 @@ const inviteBuddiesModal = () => {
             return
         }
         setStep((value) => value + 1)
+    }
+
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+        if (step !== STEPS.PHONE_NUMBER) {
+            return onNext()
+        }
+        setIsLoading(true)
+        axios.post('/api/invite', data)
+        .then(() => {
+            toast.success("Invite successful!")
+            router.refresh()
+            reset()
+            setStep(STEPS.FUNNY_NAME)
+            inviteBuddiesModal.onClose()
+            console.log(data)
+            // handleSendSMS()
+        }).catch((err) => {
+            toast.error("Please try again", err)
+        }).finally(() => { 
+            setIsLoading(false)
+        })
+
     }
 
     const actionLabel = useMemo(() => {
@@ -161,7 +220,7 @@ const inviteBuddiesModal = () => {
         onClose={inviteBuddiesModal.onClose}
         // onSubmit={inviteBuddiesModal.onClose}
         // action={onNext}
-        onSubmit={onNext}
+        onSubmit={handleSubmit(onSubmit)}
         actionLabel={actionLabel}
         secondaryActionLabel={secondaryActionLabel}
         secondaryAction={step === STEPS.FUNNY_NAME ? undefined : onBack}

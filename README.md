@@ -1,6 +1,7 @@
 https://youtu.be/c_-b_isI4vg?si=ELBUeI8H7oLSQaNe&t=2072
 
 Some things that I want to follow up on
+- update invite link to go to website
 - automatically login when you sign up
 - switching email field name to phone number
 - Google Auth

@@ -1,6 +1,6 @@
 'use client'
 
-import { BiSearch } from "react-icons/bi";
+import { GiConfirmed } from "react-icons/gi";
 
 const Search = () => {
     return (
@@ -17,8 +17,17 @@ const Search = () => {
         ">
             <div className="flex flex-row items-center justify-between">
 
-                <div className="text-sm font-semibold px-6">
-                    Chris Keating
+                {/* <div className="text-sm font-semibold px-6"> */}
+                <div className="hidden
+                sm:block
+                text-sm
+                font-semibold
+                px-6
+                border-x-[1px]
+                flex-1
+                text-center
+                ">
+                    Date?
                 </div>
                 <div className="hidden
                 sm:block
@@ -29,12 +38,24 @@ const Search = () => {
                 flex-1
                 text-center
                 ">
-                Buddy List
+                    Timeslot?
+                </div>
+                <div className="hidden
+                sm:block
+                text-sm
+                font-semibold
+                px-6
+                border-x-[1px]
+                flex-1
+                text-center
+                items-center gap-3
+                ">
+                    Add Your Buddies Phone Numbers
                 </div>
                 <div className="text-sm pl-6 pr-2 text-gray-600 flex flex-row items-center gap-3">
-                Add Buddies
-                    <div className="p-2 bg-rose-500 rounded-full text-white">
-                        <BiSearch size={18}/>
+                Send Invites to This List
+                    <div className="p-2 bg-[#0115fc] rounded-full text-white">
+                        <GiConfirmed size={18}/>
                     </div>
                 </div>
             </div>
