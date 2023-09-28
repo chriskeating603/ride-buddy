@@ -1,63 +1,57 @@
-datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
-}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
 model User {
-  id String @id @default(uuid())
-  email String @unique // include with country code (without + sign) and area code
-  name String
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  // phoneNumber String @unique // include with country code (without + sign) and area code
+  // phoneVerified DateTime? // verified on Twilio
+  email String? @unique // include with country code (without + sign) and area code
+  name String?
   image String?
   hashedPassword String? // not sure how to handle if user signs up with Google Auth
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  // countryCode String
+  // favoriteIds String[] @db.ObjectId
   invite Invite[]
   list List[]
   availabilityPosting AvailabilityPosting[]
   timeslot Timeslot[]
-  //  @map("_id") 
-  // phoneNumber String @unique // include with country code (without + sign) and area code
-  // phoneVerified DateTime? // verified on Twilio
-  // countryCode String
-  // favoriteIds String[] 
   // reservation Reservation[]
 }
 
 model Invite {
-  id String @id @default(uuid())
-  name String?
-  phoneNumber String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@index([userId])
-
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   // phoneNumber String @unique // include with country code (without + sign) and area code
   // phoneVerified DateTime? // verified on Twilio
   // email String? @unique // include with country code (without + sign) and area code
+  userId String @db.ObjectId
+  name String?
+  phoneNumber String?
   // image String?
   // hashedPassword String? // not sure how to handle if user signs up with Google Auth
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   // countryCode String
-  // favoriteIds String[] 
+  // favoriteIds String[] @db.ObjectId
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model List {
-  id String @id @default(uuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
   type String? // favorites, friends, family, work, etc
   name String?
   phoneNumberList String
-  
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@index([userId])
-  
   // provider String
   // providerAccountId String
   // refresh_token String? @db.String
@@ -68,14 +62,15 @@ model List {
   // id_token String?
   // session_state String?
 // ????  @@unique([ provider, providerAccountId])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   // timeslot Timeslot[]
   // listItems ListItem[]
 }
 
 // model ListItem {
-//   id String @id @default(uuid())
-//   userId String 
-//   listId String 
+//   id String @id @default(auto()) @map("_id") @db.ObjectId
+//   userId String @db.ObjectId
+//   listId String @db.ObjectId
 //   phoneNumber String
 //   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 //   list List @relation(fields: [listId], references: [id])
@@ -83,7 +78,8 @@ model List {
 // }
 
 model AvailabilityPosting {
-  id String @id @default(uuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
   email String?
   createdAt DateTime @default(now())
   availabilityStart DateTime
@@ -94,41 +90,22 @@ model AvailabilityPosting {
   participantCount Int?
   title String?
   PricePerSlot Int?
-  
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade) 
-  @@index([userId])
-
-  timeslot Timeslot []
-  
   // startTime DateTim
-  // listId String 
+  // listId String @db.ObjectId
   // SlotLengthInMin Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade) 
   // list List @relation(fields: [listId], references: [id])
+  timeslot Timeslot []
 }
 
 model Timeslot {
-  // id String @id @default(uuid())
-  id Int @id @default(autoincrement())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  availabilityPostingId String @db.ObjectId
   email String?
   createdAt DateTime @default(now())
-  startTime DateTime
-  endTime DateTime
-  orderedId Int?
-  phoneNumbersOfferedTo String?
-  // we can set up a listener for this field so that when this is updated, we can send out a text saying something like, this slot has now been claimed3
-  claimedAt DateTime? // if claimed, then this is the time it was claimed
-  claimedUserPhoneId String? // if claimed, then this is the user who claimed it
-  claimedUserPhoneNumber String? // if claimed, then this is the user who claimed it
-  
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade) 
-  @@index([userId])
-
-  availabilityPostingId String 
-  availabilityPosting AvailabilityPosting @relation(fields: [availabilityPostingId], references: [id], onDelete: Cascade)
-  @@index([availabilityPostingId])
-
+  availabilityStart DateTime
+  availabilityEnd DateTime
   // duration Int // length of each slot in minutes
   // phoneNumbers String
   // category String?
@@ -136,19 +113,21 @@ model Timeslot {
   // title String?
   // PricePerSlot Int?
   // startTime DateTim
-  // listId String 
+  // listId String @db.ObjectId
   // SlotLengthInMin Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  availabilityPosting AvailabilityPosting @relation(fields: [availabilityPostingId], references: [id], onDelete: Cascade)
   // list List @relation(fields: [listId], references: [id])
   // reservation Reservation []
 }
 
 // model Reservation {
-//   id String @id @default(uuid())
+//   id String @id @default(auto()) @map("_id") @db.ObjectId
 //   createdAt DateTime @default(now())
-//   timeslotId String 
+//   timeslotId String @db.ObjectId
 //   // listItemId String
-//   userId String 
-//   callerNumber String 
+//   userId String @db.ObjectId
+//   callerNumber String @db.ObjectId
 //   paid Boolean @default(false)
 //   price Int
 //   // isCallerAlreadyUser Boolean @default(false)s

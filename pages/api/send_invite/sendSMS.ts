@@ -1,5 +1,5 @@
 // import { NextApiRequest, NextApiResponse } from 'next';
-import sendSMS from '@/app/utils/DEPRECATED_sendSMS'
+import {sendSMS} from '@/zscrap_paper/DEPRECATED_sendSMS'
 
 // export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 //   if (req.method === 'POST') {

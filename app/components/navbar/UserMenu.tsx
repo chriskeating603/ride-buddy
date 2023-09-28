@@ -32,7 +32,7 @@ const UserMenu: React.FC<UserMenuProps> = (
         }
         inviteBuddiesModal.onOpen()
         console.log("Invite a buddy")
-    }, [currentUser, loginModal]);
+    }, [currentUser, loginModal, inviteBuddiesModal]);
 
     return ( 
         <div className="relative">
@@ -102,7 +102,7 @@ const UserMenu: React.FC<UserMenuProps> = (
                                 label="Buddy Lists"
                                 /> 
                                 <MenuItem onClick={() => {}}
-                                label="Timeslots and Calls"
+                                label="Past Timeslots and Calls"
                                 />
                                 <MenuItem onClick={() => {}}
                                 label="Monetization"

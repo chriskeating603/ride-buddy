@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { SubmitHandler } from "react-hook-form";
 import { on } from "events";
 import { useRouter } from "next/navigation"; // not next/router
-import {sendSMS} from '@/app/utils/DEPRECATED_sendSMS';
+import {sendSMS} from '@/zscrap_paper/DEPRECATED_sendSMS';
 
 
 
@@ -82,9 +82,9 @@ enum STEPS {
     //   }
 
 
-const inviteBuddiesModal = () => {
+const InviteBuddiesModal = () => {
     const router = useRouter()
-    const inviteBuddiesModal = useInviteBuddiesModal();
+    const InviteBuddiesModal = useInviteBuddiesModal();
     const [step, setStep] = useState(STEPS.FUNNY_NAME)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -124,7 +124,7 @@ const inviteBuddiesModal = () => {
             router.refresh()
             reset()
             setStep(STEPS.FUNNY_NAME)
-            inviteBuddiesModal.onClose()
+            InviteBuddiesModal.onClose()
             console.log(data)
             // handleSendSMS()
         }).catch((err) => {
@@ -216,9 +216,9 @@ const inviteBuddiesModal = () => {
     return (
         <Modal
         disabled={isLoading}
-        isOpen={inviteBuddiesModal.isOpen}
-        onClose={inviteBuddiesModal.onClose}
-        // onSubmit={inviteBuddiesModal.onClose}
+        isOpen={InviteBuddiesModal.isOpen}
+        onClose={InviteBuddiesModal.onClose}
+        // onSubmit={InviteBuddiesModal.onClose}
         // action={onNext}
         onSubmit={handleSubmit(onSubmit)}
         actionLabel={actionLabel}
@@ -230,4 +230,4 @@ const inviteBuddiesModal = () => {
     )
 }
 
-export default inviteBuddiesModal;
+export default InviteBuddiesModal;

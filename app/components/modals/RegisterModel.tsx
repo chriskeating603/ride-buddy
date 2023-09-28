@@ -14,9 +14,9 @@ import Button from '../Button';
 import { signIn } from 'next-auth/react';
 
 
-const registerModal = () => {
-    const registerModal = useRegisterModal()
-    const loginModal = useLoginModal()
+const RegisterModal = () => {
+    const RegisterModal = useRegisterModal()
+    const LoginModal = useLoginModal()
     const [isLoading, setIsLoading] = useState(false)
 
     const {
@@ -36,8 +36,8 @@ const registerModal = () => {
         axios.post('/api/register', data)
         .then(() => {
             toast.success("Account created successfully!")
-            registerModal.onClose()
-            loginModal.onOpen()
+            RegisterModal.onClose()
+            LoginModal.onOpen()
             console.log(data)
         }).catch((err) => {
             toast.error("Something went wrong! Please try again")
@@ -47,9 +47,9 @@ const registerModal = () => {
     }
     
 const onToggle = useCallback(() => {
-    registerModal.onClose()
-    loginModal.onOpen()
-}, [registerModal, loginModal])
+    RegisterModal.onClose()
+    LoginModal.onOpen()
+}, [RegisterModal, LoginModal])
 
     const bodyContent = (
         <div className="flex flex-col gap-4">
@@ -92,11 +92,11 @@ const onToggle = useCallback(() => {
     
     return ( <Modal 
         disabled={isLoading} 
-        isOpen={registerModal.isOpen}
+        isOpen={RegisterModal.isOpen}
         // title='Welcome to RiderB'
         // subtitle='Create an account'
         actionLabel='Continue' 
-        onClose={registerModal.onClose}
+        onClose={RegisterModal.onClose}
         onSubmit={handleSubmit(onSubmit)}  
         body={bodyContent}
         footer={footerContent}
@@ -104,4 +104,4 @@ const onToggle = useCallback(() => {
     /> );
 }
  
-export default registerModal;
+export default RegisterModal;

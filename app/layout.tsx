@@ -14,7 +14,10 @@ import InviteBuddies from "./components/modals/InviteBuddiesModal.tsx"
 import Search from "./components/navbar/Search.tsx"
 import Dates from "./components/Calendar.tsx"
 import Timeslots from "./components/Timeslots.tsx"
-import TimeslotForm from "./components/TimeslotForm.tsx"
+import AvailabilityPostingForm from "./components/AvailabilityPostingForm.tsx"
+import MessageListener from "./components/MessageListener.tsx"
+import PreviousPostings from "./components/PreviousPostings.tsx"
+import FormAndPostings from "./components/FormAndPostings.tsx"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -43,13 +46,17 @@ export default async function RootLayout({
             <LoginModal />
             <RegisterModal />
             {/* <Modal title="Hello World" actionLabel='Submit' secondaryActionLabel='Login' isOpen /> */}
+            {/* I don't want to wait for the currentUser to return, can I load the logged out user experience and then add that info in later? */}
             <Navbar currentUser={currentUser}/>
             {/* <Lists /> */}
           </ClientOnly>
           <div className="
           p-1">
             {/* <Search /> */}
-            <TimeslotForm />
+            <FormAndPostings />
+            {/* <AvailabilityPostingForm />
+            <PreviousPostings /> */}
+            <MessageListener />
             {/* <Dates />
             <Timeslots /> */}
             {/* {children} */}

@@ -18,10 +18,10 @@ import { useRouter } from 'next/navigation';
 
 
 
-const loginModal = () => {
+const LoginModal = () => {
     const router = useRouter()
-    const loginModal = useLoginModal()
-    const registerModal = useRegisterModal()
+    const LoginModal = useLoginModal()
+    const RegisterModal = useRegisterModal()
     const [isLoading, setIsLoading] = useState(false)
 
     const {
@@ -45,7 +45,7 @@ const loginModal = () => {
             if(callback?.ok) {
                 toast.success('Logged in successfully')
                 router.refresh()
-                loginModal.onClose()
+                LoginModal.onClose()
             }
             if (callback?.error) {
                 toast.error(callback.error)
@@ -54,9 +54,9 @@ const loginModal = () => {
     }
     
     const onToggle = useCallback(() => {
-        loginModal.onClose()
-        registerModal.onOpen()
-    }, [loginModal, registerModal])
+        LoginModal.onClose()
+        RegisterModal.onOpen()
+    }, [LoginModal, RegisterModal])
 
     const bodyContent = (
         <div className="flex flex-col gap-4">
@@ -100,11 +100,11 @@ const loginModal = () => {
     
     return ( <Modal 
         disabled={isLoading} 
-        isOpen={loginModal.isOpen}
+        isOpen={LoginModal.isOpen}
         // title='Welcome to RiderB'
         subtitle='Create an account'
         actionLabel='Continue' 
-        onClose={loginModal.onClose}
+        onClose={LoginModal.onClose}
         onSubmit={handleSubmit(onSubmit)}  
         body={bodyContent}
         footer={footerContent}
@@ -112,4 +112,4 @@ const loginModal = () => {
     /> );
 }
  
-export default loginModal;
+export default LoginModal;
