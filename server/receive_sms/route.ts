@@ -6,7 +6,9 @@ const httpServer = new Server();
 const port = 4000;
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    // origin: "http://localhost:3000",
+    // origin: "*",
+    origin: ["http://localhost:3000", "https://ride-buddy-2wq35lbex-ckeatingnhs-projects.vercel.app/"],
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true

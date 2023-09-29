@@ -154,6 +154,7 @@ const InviteBuddiesModal = () => {
             <Heading
             title={'Add Your Buddy\'s Name'}
             subtitle={'Clown on their name and it\'s how they\'ll be identified forever'}
+            center={true}
             />
             <div className="
                 grid 
@@ -166,7 +167,7 @@ const InviteBuddiesModal = () => {
                 id={'funnyName'}
                 type="text"
                 disabled={false}
-                formatPrice={false}
+                // formatPrice={false}
                 required={true}
                 register={register}
                 errors={errors}
@@ -185,6 +186,7 @@ const InviteBuddiesModal = () => {
                 <Heading
                 title={'Add Their Phone Number'}
                 subtitle={'This one you can\'t really mess around with unfortunately'}
+                center={true}
                 />
                 <div className="
                     grid 
@@ -197,7 +199,7 @@ const InviteBuddiesModal = () => {
                     id={'phoneNumber'}
                     type="text"
                     disabled={false}
-                    formatPrice={false}
+                    // formatPrice={false}
                     required={true}
                     register={register}
                     errors={errors}

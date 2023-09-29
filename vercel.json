@@ -1,0 +1,8 @@
+{
+    "build": {
+      "env": {
+        "PRISMA_FORCE_NAPI": "true"
+      }
+    }
+  }
+  

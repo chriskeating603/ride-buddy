@@ -63,6 +63,7 @@ const LoginModal = () => {
             <Heading 
             title="Log in you piece of garbage"
             subtitle='Welcome back to Ride Buddy'
+            center={true}
             />
             <Input id='email' label='Phone Number' disabled={isLoading} register={register} errors={errors} required />
             <Input id='password' type='password' label='Password' disabled={isLoading} register={register} errors={errors} required />

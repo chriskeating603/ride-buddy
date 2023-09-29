@@ -9,7 +9,7 @@ export async function POST (
 ) {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
-        return NextResponse.error(401)
+        return NextResponse.error()
     };
     const body = await request.json();
     const { name, phoneNumber } = body;
@@ -47,7 +47,11 @@ export async function POST (
       console.log('SMS sent successfully');
     //   return { success: true, message: 'SMS sent successfully' };
     } catch (error) {
-        console.error('Error sending SMS:', error.message);
+        if (error instanceof Error) {
+            console.error('Error sending SMS:', error.message);
+        } else {
+            console.error('An unknown error occurred');
+        }
         // return { success: false, message: 'Failed to send SMS' };
     }
 

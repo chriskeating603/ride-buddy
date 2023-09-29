@@ -35,10 +35,12 @@ function extractMinutesFromString(inputString: string): number | null {
 export async function POST (
     request: Request, 
 ) {
+  console.log('FIrst block of create listing route');
   // console.log('ZEROETH BLOCK')
     const currentUser = await getCurrentUser();
     if (!currentUser) {
-        return NextResponse.error(401)
+      return NextResponse.error();
+
     };
     const userId = currentUser.id.toString();
     const email = currentUser.email.toString();
@@ -115,7 +117,14 @@ export async function POST (
     function convertUTCtoEST(utcTimestamp: string): string {
         const utcDate = new Date(utcTimestamp);
         const estOptions = { timeZone: 'America/New_York', hour12: true, hour: 'numeric', minute: '2-digit' };
-        const pstOptions = { timeZone: 'America/Los_Angeles', hour12: true, hour: 'numeric', minute: '2-digit' };
+        // const pstOptions = { timeZone: 'America/Los_Angeles', hour12: true, hour: 'numeric', minute: '2-digit' };
+        const pstOptions: Intl.DateTimeFormatOptions = {
+          timeZone: 'America/Los_Angeles',
+          hour12: true,
+          hour: 'numeric',
+          minute: '2-digit'
+      };
+      
         // return utcDate.toLocaleString('en-US', pstOptions).replace(/\s+/g, '');
         return utcDate.toLocaleString('en-US', pstOptions).replace(/\s+/g, '');
     }
@@ -123,7 +132,7 @@ export async function POST (
       const timeSlots = generateTimeSlots(availabilityStart, availabilityEnd, duration);
       var slotStr = ''
     
-    async function insertIntoDatabaseInParallel(slots) {
+      async function insertIntoDatabaseInParallel(slots: TimeSlot[]) {
         const insertionPromises = slots.map(async (slot) => {
             console.log('Timeslot creating:');
             const createdTimeSlot = await prisma.timeslot.create({
@@ -135,7 +144,7 @@ export async function POST (
                     phoneNumbersOfferedTo: slot.phoneNumbers,
                     user: {
                       connect: {
-                        id: currentUser.id
+                        id: currentUser!.id // use the non-null assertion operator here
                       }
                     },
                     availabilityPosting: {
@@ -164,24 +173,41 @@ export async function POST (
           slotStr += `Reply ${slot.uuid}: ${convertUTCtoEST(slot.startTime.toString())} - ${convertUTCtoEST(slot.endTime.toString())}\n`
         }
          catch (error) {
-          console.error('Error Creating Timeslot:', error.message);
+            if (error instanceof Error) {
+              console.error('Error Creating Timeslot:', error.message);
+            } else {
+              console.error('An unknown error occurred');
         }
-      });
+      }
+    });
 
     slotStr += `Reply 0 to tell 'em to kick rocks!\n\nReply with the # and your name to claim a slot!\ne.g. "123 - Chris Keating"`
     // could check the phone number to see if we have a user with that phone number and add their name
     phoneNumbersArr.forEach((num:string) => {
         try {
+            console.log('For loop for sending texts is happenening now');
             client.messages.create({
                 body: `Hello from Ride Buddy! ${currentUser.name} is about to be available for phone call from ${convertUTCtoEST(availabilityStart)} to ${convertUTCtoEST(availabilityEnd)} PST, for timeslots of ${durationStr} - do you want to chat with them? Claim a slot below:\n\n${slotStr}`,
                 from: twilioPhoneNumber,
                 to: num,
+            })
+            .then(message => {
+              console.log(`SUCCESS Message sent with ID: ${message.sid}`);
+            })
+            .catch(error => {
+              console.log(`FAIL Failed to send message: ${error.message}`);
             });
-            console.log('Availability Posting SMS Sent');
+            console.log('client is :', client)
+            // console.log('Availability Posting SMS Sent');
         } catch (error) {
-            console.error('Error Sending Availability Posting SMS:', error.message);
+          if (error instanceof Error) {
+            console.error('3Error Sending Availability Posting SMS:', error.message);
+          } else {
+            console.error('4An unknown error occurred');
             // return { success: false, message: 'Failed to send SMS' };
         }
+
+    }  
     })
 
     return NextResponse.json({ availabilityPosting, createdTimeSlots });

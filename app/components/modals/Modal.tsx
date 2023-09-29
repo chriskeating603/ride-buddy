@@ -11,10 +11,11 @@ interface ModalProps {
     onClose: () => void;
     onSubmit: () => void;
     title?: string;
-    // subtitle?: string;
+    subtitle?: string;
     body?: React.ReactElement;
     footer?: React.ReactElement;
-    actionLabel?: string;
+    actionLabel: string; // remove the '?', making it required
+
     disabled?: boolean;
     secondaryAction?: () => void;
     secondaryActionLabel?: string;

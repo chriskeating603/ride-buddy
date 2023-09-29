@@ -21,7 +21,7 @@ const FormAndPostings: React.FC = () => {
     setTimeSlots(newTimeSlots);
   };
 
-  const handleSetRequestId = (id) => {
+  const handleSetRequestId = (id: any) => {
     setRequestId(id);
   };
 

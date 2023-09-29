@@ -1,6 +1,6 @@
 // pages/api/receive_sms/smsWebhook.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import { io, httpServer } from '@/app/api/receive_sms/route.ts'; 
+import { io, httpServer } from '@/server/receive_sms/route'; 
 import prisma from '@/app/libs/prismadb'; // Adjust the path according to your folder structure
 import twilio from 'twilio';
 
@@ -86,8 +86,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(400).send("Timeslot is already claimed or does not exist.");
       }
     } catch (error) {
-      console.error("Error:", error.message);
-      res.status(500).send(error.message);
+      if (error instanceof Error) {
+        console.error("Error:", error.message);
+        res.status(500).send(error.message);
+      } else {
+        // Handle the error as an `unknown` type or rethrow it
+        console.error("An unknown error occurred:", error);
+        res.status(500).send("An unknown error occurred.");
+      }
     }
     // io.emit('new-message', {slotId: timeslotId, claimedName: timeslotClaimedName, phoneNumber: phoneNumber}); 
   } else {

@@ -24,8 +24,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.status(200).json({ success: true, message: 'SMS sent successfully' });
     } catch (error) {
-      console.error('Error sending SMS:', error.message);
-      res.status(500).json({ success: false, message: 'Failed to send SMS' });
+      if (error instanceof Error) {
+        console.error("Error:", error.message);
+        res.status(500).send(error.message);
+      } else {
+        // Handle the error as an `unknown` type or rethrow it
+        console.error("An unknown error occurred:", error);
+        res.status(500).send("An unknown error occurred.");
+      }
     }
   } else {
     res.status(405).json({ success: false, message: 'Method not allowed' });

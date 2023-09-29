@@ -5,6 +5,7 @@
 import { GiConfirmed } from "react-icons/gi";
 // import { useState, useEffect } from "react";
 import { FieldValues, set, useForm } from "react-hook-form";
+
 // import { on } from 'events';
 // import axios from "axios";
 // import toast from "react-hot-toast";
@@ -34,7 +35,7 @@ import { useRouter } from "next/navigation";
 
   const {
     register,
-    handleSubmit,
+    handleSubmit: handleSubmitFirst, // <-- Changed the name here
     formState: { errors },
     setValue,  // Add this line
     reset
@@ -73,7 +74,7 @@ import { useRouter } from "next/navigation";
     }
   };
 
-const handlePhoneNumberChange = (index, value) => {
+  const handlePhoneNumberChange = (index: number, value: string) => {
     const updatedPhoneNumbers = [...phoneNumbers];
     updatedPhoneNumbers[index] = formatPhoneNumber(value);
     setPhoneNumbers(updatedPhoneNumbers);
@@ -81,40 +82,49 @@ const handlePhoneNumberChange = (index, value) => {
     setValue(`phoneNumbers[${index}]`, updatedPhoneNumbers[index]);
 };
 
-  const formatPhoneNumber = (phoneNumber) => {
+  const formatPhoneNumber = (phoneNumber: string) => {
     // Remove any non-digit characters
     phoneNumber = phoneNumber.replace(/\D/g, "");
 
     // Apply the format (XXX) XXX-XXXX
     const matches = phoneNumber.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
     let formattedPhoneNumber = "";
-    if (matches[1]) {
-      formattedPhoneNumber += `(${matches[1]}`;
-    }
-    if (matches[2]) {
-      formattedPhoneNumber += `) ${matches[2]}`;
-    }
-    if (matches[3]) {
-      formattedPhoneNumber += `-${matches[3]}`;
+    if (matches) {  // Add this line to check if matches is not null
+
+      if (matches[1]) {
+        formattedPhoneNumber += `(${matches[1]}`;
+      }
+      if (matches[2]) {
+        formattedPhoneNumber += `) ${matches[2]}`;
+      }
+      if (matches[3]) {
+        formattedPhoneNumber += `-${matches[3]}`;
+      }
     }
     return formattedPhoneNumber;
   };
 
-  const handleAvailabilityEndChange = (e) => {
+  const handleAvailabilityEndChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const [hours, minutes] = e.target.value.split(":");
     const updatedHours = Math.min(Math.max(Number(hours), 0), 23).toString().padStart(2, '0');
     const updatedMinutes = Math.min(Math.max(Number(minutes), 0), 59).toString().padStart(2, '0');
     setAvailabilityEnd(`${updatedHours}:${updatedMinutes}`);
   };
 
-  const handleAvailabilityStartChange = (e) => {
+  const handleAvailabilityStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const [hours, minutes] = e.target.value.split(":");
     const updatedHours = Math.min(Math.max(Number(hours), 0), 23).toString().padStart(2, '0');
     const updatedMinutes = Math.min(Math.max(Number(minutes), 0), 59).toString().padStart(2, '0');
     setAvailabilityStart(`${updatedHours}:${updatedMinutes}`);
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  // const {handleSubmit} = useForm();
+
+  // const onSubmit: SubmitHandler<FieldValues> = (data) => {
+
+  // const onSubmit = handleSubmitFirst((data: FieldValues) => {
+    const onSubmit = async (data: FieldValues) => {
+
     const formData = {
         ...data,
     };
@@ -280,7 +290,8 @@ const handlePhoneNumberChange = (index, value) => {
         <button
           type="button"
           className="py-2 px-4 bg-[#0115fc] rounded-full text-white text-lg font-semibold flex items-center gap-2"
-          onClick={handleSubmit(onSubmit)}
+          onClick={handleSubmitFirst(onSubmit)}
+
           disabled={phoneNumbers.every(phoneNumber => phoneNumber === "")}
         >
           Submit

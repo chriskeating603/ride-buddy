@@ -8,7 +8,8 @@ const port = 4000; // Use a different port from your Next.js app
 
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    // origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://ride-buddy-2wq35lbex-ckeatingnhs-projects.vercel.app/"],
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true

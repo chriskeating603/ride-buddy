@@ -56,6 +56,7 @@ const onToggle = useCallback(() => {
             <Heading 
             title="Welcome to Ride Buddy!"
             subtitle='Create an account now you piece of shit'
+            center={true}
             />
             <Input id='name' label='Name' disabled={isLoading} register={register} errors={errors} required />
             <Input id='email' label='Phone Number' disabled={isLoading} register={register} errors={errors} required />

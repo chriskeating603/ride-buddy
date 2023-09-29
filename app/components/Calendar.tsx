@@ -31,7 +31,7 @@ import 'react-calendar/dist/Calendar.css';
 const CalendarComponent = () => {
   const [date, setDate] = useState(new Date());
 
-  const onChange = (newDate) => {
+  const onChange = (newDate: any) => {
     console.log(newDate)
     setDate(newDate);
   };

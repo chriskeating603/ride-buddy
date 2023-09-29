@@ -7,7 +7,7 @@ interface InviteBuddiesModalState {
 
 }
 
-const useInviteBuddiesModal = create<InviteBuddiesModalStore>((set) => ({
+const useInviteBuddiesModal = create<InviteBuddiesModalState>((set) => ({
     isOpen: false,
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),
