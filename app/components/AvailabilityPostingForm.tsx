@@ -1,48 +1,46 @@
 'use client'
-
 // AvailabilityPostingForm.tsx
 
 import { GiConfirmed } from "react-icons/gi";
-// import { useState, useEffect } from "react";
 import { FieldValues, set, useForm } from "react-hook-form";
-
+// import LoginModal from "./modals/LoginModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
 // import { on } from 'events';
-// import axios from "axios";
-// import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
-// const AvailabilityPostingForm = () => {
   import React, { useState, useEffect } from "react";
   import axios from "axios";
   import toast from "react-hot-toast";
+
   // import { useRouter } from "next/router";
   
   const AvailabilityPostingForm: React.FC<{
     handleFormSubmit: (availabilityStart: string, availabilityEnd: string, duration: string, timeSlots: any) => void;
-    setRequestId: (id: any) => void; // <-- Add this line
-}> = ({ handleFormSubmit, setRequestId }) => { // <-- And this
+    setRequestId: (id: any) => void; 
+    currentUser: any;
+}> = ({ handleFormSubmit, setRequestId, currentUser }) => {
 
     const router = useRouter()
     const [date, setDate] = useState("Today");
     const [duration, setDuration] = useState("30 minutes");
     const [availabilityStart, setAvailabilityStart] = useState(getDefaultStartTime());
     const [availabilityEnd, setAvailabilityEnd] = useState(getDefaultEndTime());
+    const [isLoginModalVisible, setLoginModalVisible] = useState(false);
+
+
     // const [mostRecentRequestId, setMostRecentRequestId] = useState("");
     const [phoneNumbers, setPhoneNumbers] = useState(["(603) 548-8033", "(646) 583-2893"]); // NOTE: remove my phone number before pushing to prod
     const [isLoading, setIsLoading] = useState(false)
     const [timeSlots, setTimeSlots] = useState([]); // Add your exact time slot type here
-
+    const loginModal = useLoginModal()
 
   const {
     register,
     handleSubmit: handleSubmitFirst, // <-- Changed the name here
     formState: { errors },
-    setValue,  // Add this line
+    setValue, 
     reset
 } = useForm<FieldValues>({
     defaultValues: {
-        // funnyName: '',
-        // phoneNumber: '',
         date: "Today",
       duration: "30 minutes",
       availabilityStart: getDefaultStartTime(),
@@ -118,13 +116,22 @@ import { useRouter } from "next/navigation";
     setAvailabilityStart(`${updatedHours}:${updatedMinutes}`);
   };
 
-  // const {handleSubmit} = useForm();
+  // const showLoginModal = () => {
+  //   setLoginModalVisible(true);
+  // };
 
-  // const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  // const hideLoginModal = () => {
+  //   setLoginModalVisible(false);
+  // };
 
-  // const onSubmit = handleSubmitFirst((data: FieldValues) => {
-    const onSubmit = async (data: FieldValues) => {
-
+  const handleFormClick = (e: React.MouseEvent) => {
+    if (!currentUser) {
+      e.preventDefault();
+      loginModal.onOpen();
+    }
+  };
+  
+  const onSubmit = async (data: FieldValues) => {
     const formData = {
         ...data,
     };
@@ -132,6 +139,7 @@ import { useRouter } from "next/navigation";
     setIsLoading(true);
     axios.post('/api/create_listing', formData)
         .then((response) => {
+            console.log('response', response);
             toast.success("Invite successful!");
             // console.log('id for entry', response);
             reset();
@@ -153,7 +161,7 @@ import { useRouter } from "next/navigation";
   }
 
   return (
-    <div className="border p-4 rounded-md shadow-sm hover:shadow-md transition cursor-pointer sm:m-32 lg:m-32 md:m-32 mt-24">
+    <div onClick={handleFormClick} className="border p-4 rounded-md shadow-sm hover:shadow-md transition cursor-pointer sm:m-32 lg:m-32 md:m-32 mt-24">
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Date (only available for today - this should be real time)

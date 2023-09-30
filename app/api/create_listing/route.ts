@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from '@/app/libs/prismadb';
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import twilio from 'twilio';
-
+let answer = ''
 function parseDateTime(dateString: string, timeString: string): Date | null {
     const now = new Date();
 
@@ -183,32 +183,54 @@ export async function POST (
 
     slotStr += `Reply 0 to tell 'em to kick rocks!\n\nReply with the # and your name to claim a slot!\ne.g. "123 - Chris Keating"`
     // could check the phone number to see if we have a user with that phone number and add their name
-    phoneNumbersArr.forEach((num:string) => {
-        try {
-            console.log('For loop for sending texts is happenening now');
-            client.messages.create({
-                body: `Hello from Ride Buddy! ${currentUser.name} is about to be available for phone call from ${convertUTCtoEST(availabilityStart)} to ${convertUTCtoEST(availabilityEnd)} PST, for timeslots of ${durationStr} - do you want to chat with them? Claim a slot below:\n\n${slotStr}`,
-                from: twilioPhoneNumber,
-                to: num,
-            })
-            .then(message => {
-              console.log(`SUCCESS Message sent with ID: ${message.sid}`);
-            })
-            .catch(error => {
-              console.log(`FAIL Failed to send message: ${error.message}`);
-            });
-            console.log('client is :', client)
-            // console.log('Availability Posting SMS Sent');
-        } catch (error) {
-          if (error instanceof Error) {
-            console.error('3Error Sending Availability Posting SMS:', error.message);
-          } else {
-            console.error('4An unknown error occurred');
-            // return { success: false, message: 'Failed to send SMS' };
+    // phoneNumbersArr.forEach((num:string) => {
+    //     try {
+    //         console.log('For loop for sending texts is happenening now');
+    //         client.messages.create({
+    //             body: `Hello from Chat Signal! ${currentUser.name} is about to be available for phone call from ${convertUTCtoEST(availabilityStart)} to ${convertUTCtoEST(availabilityEnd)} PST, for timeslots of ${durationStr} - do you want to chat with them? Claim a slot below:\n\n${slotStr}`,
+    //             from: twilioPhoneNumber, 
+    //             to: num,
+    //         })
+    //         .then(message => {
+    //           answer = message.sid
+    //           console.log(`SUCCESS Message sent with ID: ${message.sid}`);
+    //         })
+    //         .catch(error => {
+    //           answer = error
+    //           console.log(`FAIL Failed to send message: ${error.message}`);
+    //         });
+    //         console.log('client is :', client)
+    //         // console.log('Availability Posting SMS Sent');
+    //     } catch (error) {
+    //       if (error instanceof Error) {
+    //         answer = error.message
+    //         console.error('3Error Sending Availability Posting SMS:', error.message);
+    //       } else {
+    //         answer = 'An unknown error occurred'
+    //         console.error('4An unknown error occurred');
+    //         // return { success: false, message: 'Failed to send SMS' };
+    //     }
+
+    // }  
+    // })
+    for (const num of phoneNumbersArr) {
+      try {
+          const message = await client.messages.create({
+            body: `Hello from Chat Signal! ${currentUser.name} is about to be available for phone call from ${convertUTCtoEST(availabilityStart)} to ${convertUTCtoEST(availabilityEnd)} PST, for timeslots of ${durationStr} - do you want to chat with them? Claim a slot below:\n\n${slotStr}`,
+            from: twilioPhoneNumber, 
+            to: num,
+          });
+          console.log(`SUCCESS Message sent with ID: ${message.sid}`);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error('3Error Sending Availability Posting SMS:', error.message);
+        } else {
+          console.error('4An unknown error occurred');
         }
-
-    }  
-    })
-
+        console.log(`FAIL Failed to send message: ${error}`);
+      }
+  }
+  
     return NextResponse.json({ availabilityPosting, createdTimeSlots });
+    // return answer
 }

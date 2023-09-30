@@ -18,11 +18,12 @@ import AvailabilityPostingForm from "./components/AvailabilityPostingForm.tsx"
 import MessageListener from "./components/MessageListener.tsx"
 import PreviousPostings from "./components/PreviousPostings.tsx"
 import FormAndPostings from "./components/FormAndPostings.tsx"
+import Footer from "./components/Footer.tsx"
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Ride Buddy',
+  title: 'The Chat Signal',
   description: 'Connect with your friends while you ride',
 }
 
@@ -53,13 +54,14 @@ export default async function RootLayout({
           <div className="
           p-1">
             {/* <Search /> */}
-            <FormAndPostings />
+            <FormAndPostings currentUser={currentUser}/>
             {/* <AvailabilityPostingForm />
             <PreviousPostings /> */}
             <MessageListener />
             {/* <Dates />
             <Timeslots /> */}
             {/* {children} */}
+            <Footer />
           </div>
         </body>
       </html>

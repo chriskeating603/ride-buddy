@@ -1,15 +1,12 @@
 https://youtu.be/c_-b_isI4vg?si=ELBUeI8H7oLSQaNe&t=2072
 
 To Do - MVP
-- re-render table whenever slotClaimedPhoneNumber is updated 
-- push this to a server and website
-- update invite link to go to website
-- separate getCurrentUser from navbar load, which means we need to re-render specific portions of the navbar
-    - maybe show the overall navbar on load and then populate the details 
-- show all past tables for the user, ordered by when the request was sent
+- check listener and update port 4000
+- send text to original form submitter 
 
 To Do - Next
-- grey out the form while loading instead of just waiting for "invite success" message - actually I need to prioritize this, as this throws a weird status 0 error
+- re-render table whenever slotClaimedPhoneNumber is updated 
+- show all past tables for the user, ordered by when the request was sent
 - process inbound text messages from guests in order to have those users claim slots
 - automatically login when you sign up
 - switching email field name to phone number
@@ -22,6 +19,12 @@ To Do - Next
 - reset form on submit click
 
 Done
+- format times in table
+- grey out the form while loading instead of just waiting for "invite success" message - actually I need to prioritize this, as this throws a weird status 0 error
+- separate getCurrentUser from navbar load, which means we need to re-render specific portions of the navbar
+    - maybe show the overall navbar on load and then populate the details 
+- push this to a server and website
+- update invite link to go to website
 - First text not processing on front end, only on second and subsequent texts 
 - buy a web domain
 - send follow up that a slot has been claimed to everyone else

@@ -1,6 +1,7 @@
 // pages/api/receive_sms/smsWebhook.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { io, httpServer } from '@/server/receive_sms/route'; 
+// import { io, httpServer } from '@/app/api/receive_sms/route'; // Adjust the path according to your folder structure
 import prisma from '@/app/libs/prismadb'; // Adjust the path according to your folder structure
 import twilio from 'twilio';
 

@@ -37,7 +37,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
         <Container>
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
             <Logo />
-            <div className="md:text-semibold lg:text-bold">Ride Buddy</div>
+            <div className="md:text-semibold lg:text-bold">Chat Signal</div>
             {/* <Search /> */}
             <UserMenu currentUser={currentUser} />
             {/* <UserMenu currentUser={localUser} /> */}
@@ -70,7 +70,7 @@ export default Navbar;
             
 //                 <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
 //                 <Logo />
-//                 <div className="md:text-semibold lg:text-bold">Ride Buddy</div>
+//                 <div className="md:text-semibold lg:text-bold">Chat Signal</div>
 //                 {/* <Search /> */}
 //                 <UserMenu currentUser={currentUser} />
 //                 </div>

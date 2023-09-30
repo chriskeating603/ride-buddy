@@ -61,8 +61,8 @@ const LoginModal = () => {
     const bodyContent = (
         <div className="flex flex-col gap-4">
             <Heading 
-            title="Log in you piece of garbage"
-            subtitle='Welcome back to Ride Buddy'
+            title="Log into Chat Signal"
+            subtitle='Connect with your friends while you drive, do laundry, or have a few idle minutes.'
             center={true}
             />
             <Input id='email' label='Phone Number' disabled={isLoading} register={register} errors={errors} required />
@@ -86,7 +86,7 @@ const LoginModal = () => {
 
             <div className='justify-center flex flex-row items-center gap-2'>
                 <div className='py-4'>
-                    First time using Ride Buddy?
+                    First time using Chat Signal?
                 </div> 
                 <div onClick={onToggle}
                 className='text-neutral-800 cursor-pointer hover:underline'>

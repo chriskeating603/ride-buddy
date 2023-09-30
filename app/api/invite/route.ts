@@ -40,7 +40,7 @@ export async function POST (
 
     try {
       await client.messages.create({
-        body: `Hey ${body.funnyName}, ${currentUser.name} is inviting you to join Ride Buddy: link here`,
+        body: `Hey ${body.funnyName}, ${currentUser.name} is inviting you to join Chat Signal: https://ride-buddy.vercel.app/`,
         from: twilioPhoneNumber,
         to: phoneNumber,
       });

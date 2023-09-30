@@ -1,5 +1,5 @@
 'use client'
-
+// MessageListener.tsx
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
@@ -7,9 +7,14 @@ const MessageListener: React.FC = () => {
   const [messages, setMessages] = useState<string[]>([]);
   
   useEffect(() => {
-    const socket = io('http://localhost:4000', {
+    // const socket = io('http://localhost:4000', {
+    //   transports: ['websocket', 'polling'],
+    // });
+    const socketURL = process.env.NODE_ENV === 'production' ? process.env.URL : 'http://localhost:4000';
+    const socket = io(socketURL || 'http://localhost:4000', {
       transports: ['websocket', 'polling'],
     });
+
     socket.emit('client-ready');
     console.log('client-ready just fired ', new Date());
     // socket.on('connect', () => {
@@ -45,43 +50,3 @@ const MessageListener: React.FC = () => {
 }
 
 export default MessageListener;
-
-
-// import { useEffect, useState } from 'react';
-// import io from 'socket.io-client';
-
-// const MessageListener: React.FC = () => {
-//   const [messages, setMessages] = useState<string[]>([]);
-  
-//   useEffect(() => {
-//     const socket = io('http://localhost:4000', { // Point to the WebSocket server's address and port
-//     transports: ['websocket', 'polling'],
-//   });
-  
-//   socket.on('new-message', function(message: string) {
-//     setMessages(prevMessages => [...prevMessages, message]);
-//     console.log('messages', messages);
-//   });
-//   socket.on('connect_error', (error: any) => {
-//     console.error('Connection Error:', error);
-//   });
-  
-//   console.log('messages', messages);
-//     return () => {
-//       console.log('disconnecting');
-//       socket.disconnect();
-//     };
-//   }, []);
-
-
-//   return (
-//     <div>
-//       <h2>Messages from Twilio</h2>
-//       <ul>
-//         {messages.map((message, index) => <li key={index}>{JSON.stringify(message)}</li>)}
-//       </ul>
-//     </div>
-//   );
-// }
-
-// export default MessageListener;

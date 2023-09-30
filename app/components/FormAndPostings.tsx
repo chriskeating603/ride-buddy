@@ -5,7 +5,9 @@ import React, { useState } from 'react';
 import AvailabilityPostingForm from './AvailabilityPostingForm';
 import PreviousPostings from './PreviousPostings';
 
-const FormAndPostings: React.FC = () => {
+const FormAndPostings: React.FC<{
+  currentUser: any;
+}> = ({ currentUser }) => {
   const [availabilityStart, setAvailabilityStart] = useState("");
   const [availabilityEnd, setAvailabilityEnd] = useState("");
   const [duration, setDuration] = useState("");
@@ -29,7 +31,8 @@ const FormAndPostings: React.FC = () => {
     <div>
       <AvailabilityPostingForm
         handleFormSubmit={handleFormSubmit}
-        setRequestId={handleSetRequestId}  // <-- Pass the function here
+        setRequestId={handleSetRequestId} 
+        currentUser={currentUser}
       />
       {isFormSubmitted && requestId && (
         <PreviousPostings
