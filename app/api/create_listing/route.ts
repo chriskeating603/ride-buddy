@@ -116,10 +116,11 @@ export async function POST (
       }
     function convertUTCtoEST(utcTimestamp: string): string {
         const utcDate = new Date(utcTimestamp);
-        const estOptions = { timeZone: 'America/New_York', hour12: true, hour: 'numeric', minute: '2-digit' };
+        // const estOptions = { timeZone: 'America/New_York', hour12: true, hour: 'numeric', minute: '2-digit' };
         // const pstOptions = { timeZone: 'America/Los_Angeles', hour12: true, hour: 'numeric', minute: '2-digit' };
         const pstOptions: Intl.DateTimeFormatOptions = {
-          timeZone: 'America/Los_Angeles',
+          // timeZone: 'America/Los_Angeles',
+          timeZone: 'Etc/UTC',
           hour12: true,
           hour: 'numeric',
           minute: '2-digit'

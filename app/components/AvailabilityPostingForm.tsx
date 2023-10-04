@@ -3,15 +3,11 @@
 
 import { GiConfirmed } from "react-icons/gi";
 import { FieldValues, set, useForm } from "react-hook-form";
-// import LoginModal from "./modals/LoginModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
-// import { on } from 'events';
 import { useRouter } from "next/navigation";
   import React, { useState, useEffect } from "react";
   import axios from "axios";
   import toast from "react-hot-toast";
-
-  // import { useRouter } from "next/router";
   
   const AvailabilityPostingForm: React.FC<{
     handleFormSubmit: (availabilityStart: string, availabilityEnd: string, duration: string, timeSlots: any) => void;
@@ -28,7 +24,8 @@ import { useRouter } from "next/navigation";
 
 
     // const [mostRecentRequestId, setMostRecentRequestId] = useState("");
-    const [phoneNumbers, setPhoneNumbers] = useState(["(603) 548-8033", "(646) 583-2893"]); // NOTE: remove my phone number before pushing to prod
+    // const [phoneNumbers, setPhoneNumbers] = useState(["(603) 548-8033", "(646) 583-2893"]); 
+    const [phoneNumbers, setPhoneNumbers] = useState(['']); 
     const [isLoading, setIsLoading] = useState(false)
     const [timeSlots, setTimeSlots] = useState([]); // Add your exact time slot type here
     const loginModal = useLoginModal()
@@ -116,14 +113,6 @@ import { useRouter } from "next/navigation";
     setAvailabilityStart(`${updatedHours}:${updatedMinutes}`);
   };
 
-  // const showLoginModal = () => {
-  //   setLoginModalVisible(true);
-  // };
-
-  // const hideLoginModal = () => {
-  //   setLoginModalVisible(false);
-  // };
-
   const handleFormClick = (e: React.MouseEvent) => {
     if (!currentUser) {
       e.preventDefault();
@@ -141,23 +130,18 @@ import { useRouter } from "next/navigation";
         .then((response) => {
             console.log('response', response);
             toast.success("Invite successful!");
-            // console.log('id for entry', response);
             reset();
             router.refresh();
-            setTimeSlots(response.data.createdTimeSlots); // Update the time slots in state
+            setTimeSlots(response.data.createdTimeSlots); 
             console.log('settimeslots', response.data.createdTimeSlots);
-            handleFormSubmit(availabilityStart, availabilityEnd, duration, response.data.createdTimeSlots);  // Pass directly
-            setRequestId(response.data.availabilityPosting.id);  // <-- This line passes the id to the parent
-            // console.log(response.data.id)
-            // setMostRecentRequestId(response.data.id)
+            handleFormSubmit(availabilityStart, availabilityEnd, duration, response.data.createdTimeSlots); 
+            setRequestId(response.data.availabilityPosting.id); 
         })
         .catch((err) => {
             toast.error("Please try again", err);
         }).finally(() => {
             setIsLoading(false);
-        });
-    
-        
+        });     
   }
 
   return (

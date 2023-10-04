@@ -31,8 +31,11 @@ const TimeSlotsTable: React.FC<TimeSlotsTableProps> = ({
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>(initialTimeSlots);
   useEffect(() => {
     console.log('PreviousPostings: ', Math.floor(Date.now() / 1000));
-    const socketURL = process.env.NODE_ENV === 'production' ? process.env.URL : 'http://localhost:4000';
-    const socket = io(socketURL || 'http://localhost:4000');
+    const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
+    // const socketURL = process.env.URL
+    // const socket = io(socketURL || 'http://localhost:4001');
+    // const socket = io(socketURL)
+    const socket = io('https://ride-buddy-listener-1b976fe0b164.herokuapp.com' || 'http://localhost:4000')
     // const socket = io('http://localhost:4000');
     // console.log('ZERO');
     socket.on('new-message', (message: { slotId: number, claimedName: string, phoneNumber: string }) => {
@@ -61,7 +64,8 @@ const TimeSlotsTable: React.FC<TimeSlotsTableProps> = ({
   function convertUTCtoEST(utcTimestamp: string): string {
     const utcDate = new Date(utcTimestamp);
     const estOptions: Intl.DateTimeFormatOptions = {
-      timeZone: 'America/Los_Angeles',
+      // timeZone: 'America/Los_Angeles',
+      timeZone: 'Etc/UTC',
       hour12: true,
       weekday: 'short', // will output the short name of the weekday e.g., "Sun"
       month: 'short',   // will output the abbreviated name of the month e.g., "Feb"

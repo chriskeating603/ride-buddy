@@ -1,50 +1,57 @@
 'use client'
 // MessageListener.tsx
+
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
+type Message = {
+  slotId: number;
+  claimedName: string;
+  phoneNumber: string;
+};
+
 const MessageListener: React.FC = () => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   
   useEffect(() => {
-    // const socket = io('http://localhost:4000', {
+    // const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
+    // // const socketURL = process.env.URL
+    // // const socketURL = process.env.NODE_ENV === 'production' ? 'https://ride-buddy-listener-1b976fe0b164.herokuapp.com/' : 'http://localhost:4000';
+    // const socket = io(socketURL, {
     //   transports: ['websocket', 'polling'],
     // });
-    const socketURL = process.env.NODE_ENV === 'production' ? process.env.URL : 'http://localhost:4000';
-    const socket = io(socketURL || 'http://localhost:4000', {
+    const socket = io('https://ride-buddy-listener-1b976fe0b164.herokuapp.com' || 'http://localhost:4000', {
       transports: ['websocket', 'polling'],
     });
 
+    console.log('socket', socket);
+
     socket.emit('client-ready');
-    console.log('client-ready just fired ', new Date());
-    // socket.on('connect', () => {
-    //   console.log('Sending client-ready event at:', new Date());
-    //   socket.emit('client-ready');
-    // });
-    socket.on('new-message', function(message: string) {
-      console.log('Received message at:', new Date(), 'Message:', message);
-      setMessages(prevMessages => {
-        const newMessages = [...prevMessages, message];
-        console.log('messages', newMessages);
-        return newMessages;
-      });
+    socket.on('new-message', function(message: Message) {
+      console.log('new-message', message);
+      setMessages(prevMessages => [...prevMessages, message]);
     });
     socket.on('connect_error', (error: any) => {
       console.error('Connection Error:', error);
     });
     
     return () => {
-      console.log('disconnecting');
       socket.disconnect();
     };
-  }, []); // Empty dependency array
+  }, []);
 
   return (
     <div>
-      <h2>Messages from Twilio</h2>
+      {/* <h2>Messages from Twilio</h2>
       <ul>
-        {messages.map((message, index) => message !== 'Hello from Server!' ? <li key={index}>{JSON.stringify(message)}</li>: null)}
-      </ul>
+        {messages.map((message, index) => (
+          <li key={index}>
+            Slot ID: {message.slotId} <br />
+            Claimed Name: {message.claimedName} <br />
+            Phone Number: {message.phoneNumber}
+          </li>
+        ))}
+      </ul> */}
     </div>
   );
 }

@@ -1,28 +1,28 @@
-// receive_sms/route.ts
+// receive_sms/route1.ts
+
 import { Server } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 
+const port = Number(process.env.SOCKET_IO_PORT) || 4000;
+const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:3000";
 const httpServer = new Server();
-const port = process.env.PORT || 4000;
+
 const io = new SocketIOServer(httpServer, {
   cors: {
-    // origin: "http://localhost:3000",
-    // origin: "*",
-    origin: ["http://localhost:3000", "https://ride-buddy.vercel.app/"],
+    origin: corsOrigin,
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
   }
 });
+
 io.on('connection', (socket) => {
-    // console.log('receive_sms/route connection: ',  Math.floor(Date.now() / 1000));
     socket.on('client-ready', () => {
-      console.log('Received client-ready event at:', new Date());
       socket.emit('new-message', 'Hello from Server!');
     });
     socket.on('message', (message: string) => {
         io.emit('new-message', message);
-    }); 
+    });
 });
 
 httpServer.listen(port, () => {

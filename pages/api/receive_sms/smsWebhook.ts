@@ -1,8 +1,8 @@
 // pages/api/receive_sms/smsWebhook.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import { io, httpServer } from '@/server/receive_sms/route'; 
-// import { io, httpServer } from '@/app/api/receive_sms/route'; // Adjust the path according to your folder structure
-import prisma from '@/app/libs/prismadb'; // Adjust the path according to your folder structure
+import io from "socket.io-client";
+const socket = io("https://ride-buddy-listener-1b976fe0b164.herokuapp.com:15353");
+import prisma from '@/app/libs/prismadb';
 import twilio from 'twilio';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -13,26 +13,14 @@ const twilioClient = twilio(accountSid, authToken);
 console.log("FIRST BLOCK")
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    console.log('Webhook: ', Math.floor(Date.now() / 1000));
-    
-    // console.log("SECOND BLOCK")
-    // console.log("webhook firing");
+    // console.log('Webhook: ', Math.floor(Date.now() / 1000));
     const incomingMessage = req.body.Body;
     const num = req.body.From;
-    // io.emit('new-message', {'slot': incomingMessage, 'phoneNumber': num}); 
-    
-    // console.log("THIRD BLOCK")
-    // Assume incomingMessage is the id of the timeslot
     const phoneNumber = num;
-    // Remove any non-digit characters from incomingMessage
-    // const cleanedMessage = ;
-    // Convert the cleaned string to a number
     const timeslotId = parseInt(incomingMessage.replace(/\D/g, ''), 10);
     const timeslotClaimedName = incomingMessage.replace(/[^a-zA-Z\s]/g, '').trim();
-    setTimeout(() => {
-      io.emit('new-message', {slotId: timeslotId, claimedName: timeslotClaimedName, phoneNumber: phoneNumber});
-  }, 2000); // delay for 1 seconds
-    // io.emit('new-message', {slotId: timeslotId, claimedName: timeslotClaimedName, phoneNumber: phoneNumber}); 
+    socket.emit('new-message', {slotId: timeslotId, claimedName: timeslotClaimedName, phoneNumber: phoneNumber});
+
     if (isNaN(timeslotId)) {
       console.error("Invalid timeslot ID:", incomingMessage);
       res.status(400).send("Invalid timeslot ID");
@@ -64,6 +52,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           from: twilioPhoneNumber,
           to: phoneNumber,
         });
+
+        await twilioClient.messages.create({
+          body: `${phoneNumber} successfully claimed the timeslot ${timeslot.id} - have a good chat!`,
+          from: twilioPhoneNumber,
+          to: timeslot.email || '6035488033',
+        });
+
         // Notify other numbers that the timeslot has been claimed
         if (updatedTimeslot.phoneNumbersOfferedTo) {
           const otherNumbers = updatedTimeslot.phoneNumbersOfferedTo.split(',')
@@ -96,50 +91,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(500).send("An unknown error occurred.");
       }
     }
-    // io.emit('new-message', {slotId: timeslotId, claimedName: timeslotClaimedName, phoneNumber: phoneNumber}); 
   } else {
     res.status(405).send("Method Not Allowed");
   }
 }
-  //   try {
-  //     // Query and update the timeslot in the database
-  //     console.log("FOURTH BLOCK")
-  //     const updatedTimeslot = await prisma.timeslot.update({
-  //       where: {
-  //         id: timeslotId
-  //       },
-  //       data: {
-  //         claimedUserPhoneNumber: phoneNumber
-  //       },
-  //     });
-  //     console.log("FIFTH BLOCK")
-  //     console.log("Updated Timeslot:", updatedTimeslot);
-  //   } catch (error) {
-  //     console.error("Error updating timeslot:", error.message);
-  //   }
-  //   console.log("SIXTH BLOCK")
-  //   res.status(200).send(`${incomingMessage} from ${num}`);
-  // } else {
-  //   console.log("SEVENTH BLOCK")
-  //   res.status(405).end();
-  // }
-  
-
-
-// // pages/api/receive_sms/smsWebhook.ts
-// import { NextApiRequest, NextApiResponse } from 'next';
-// import { io, httpServer } from '@/app/api/receive_sms/route.ts'; // Adjust the path according to your folder structure
-
-// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-//   if (req.method === 'POST') {
-//     console.log("webhook firing");
-//     // console.log(req.body);
-//     const incomingMessage = req.body.Body;
-//     const num = req.body.From;
-//     // io.emit('new-message', `${incomingMessage} from ${num}`); 
-//     io.emit('new-message', {'slot': incomingMessage, 'phoneNumber': num}); 
-//     res.status(200).send(`${incomingMessage} from ${num}`);
-//   } else {
-//     res.status(405).end();
-//   }
-// }

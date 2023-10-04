@@ -100,13 +100,13 @@ const UserMenu: React.FC<UserMenuProps> = (
                        {currentUser ? (
                             <>
                                 <MenuItem onClick={() => {}}
-                                label="Buddy Lists"
+                                label="Buddy Lists (not set up yet)"
                                 /> 
                                 <MenuItem onClick={() => {}}
-                                label="Past Timeslots and Calls"
+                                label="Past Timeslots and Calls (not set up yet)"
                                 />
                                 <MenuItem onClick={() => {}}
-                                label="Monetization"
+                                label="Monetization (not set up yet)"
                                 />
                                 <MenuItem onClick={() => signOut()}
                                 label="Log Out"
