@@ -27,35 +27,24 @@ const TimeSlotsTable: React.FC<TimeSlotsTableProps> = ({
   requestId, 
   timeSlots: initialTimeSlots 
 }) => {
-  // console.log('XSIXTH');
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>(initialTimeSlots);
   useEffect(() => {
     console.log('PreviousPostings: ', Math.floor(Date.now() / 1000));
     const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
-    // const socketURL = process.env.URL
-    // const socket = io(socketURL || 'http://localhost:4001');
-    // const socket = io(socketURL)
-    const socket = io('https://ride-buddy-listener-1b976fe0b164.herokuapp.com' || 'http://localhost:4000')
-    // const socket = io('http://localhost:4000');
-    // console.log('ZERO');
+    const socket = io(socketURL || 'http://localhost:4000')  
     socket.on('new-message', (message: { slotId: number, claimedName: string, phoneNumber: string }) => {
-      // console.log('XFIRST');
       setTimeSlots(prevSlots => {
-        const index = prevSlots.findIndex(slot => slot.requestId === message.slotId); // Changed from `slot.uuid` to `slot.requestId`
-        // console.log('XSECOND');
+        const index = prevSlots.findIndex(slot => slot.requestId === message.slotId);
         console.log('index: ', index);
         if (index !== -1) {
-          // console.log('XTHIRD');
           const updatedSlot = { ...prevSlots[index], claimedUserPhoneNumber: message.phoneNumber };
           const newSlots = [...prevSlots];
           newSlots[index] = updatedSlot;
           return newSlots;
         }
-        // console.log('XEIGHTH');
         return prevSlots;
       });
     });
-    // console.log('XFOURTH');
     return () => {
       socket.disconnect();
     };
@@ -74,7 +63,6 @@ const TimeSlotsTable: React.FC<TimeSlotsTableProps> = ({
       minute: '2-digit' // will output the minute, always as two digits
     };
   
-    // Convert to desired format
     let formatted = utcDate.toLocaleString('en-US', estOptions);
     formatted = formatted.replace(',', ''); // remove commas
     formatted = formatted.replace(/\s+/, ' '); // remove extra spaces
@@ -101,8 +89,8 @@ const TimeSlotsTable: React.FC<TimeSlotsTableProps> = ({
               <td className="py-2 px-2 text-center">{slot.uuid}</td>
               <td className="py-2 px-2 text-center">{convertUTCtoEST(slot.startTime)}</td>
               <td className="py-2 px-2 text-center">{convertUTCtoEST(slot.endTime)}</td>
-              <td className="py-2 px-2 text-center">{slot.claimedUserPhoneNumber}</td>
-              {/* <td className="py-2 px-2 text-center">{slot.claimedUserPhoneNumber ? slot.claimedUserPhoneNumber : '-'}</td> */}
+              {/* <td className="py-2 px-2 text-center">{slot.claimedUserPhoneNumber}</td> */}
+              <td className="py-2 px-2 text-center">{slot.claimedUserPhoneNumber ? slot.claimedUserPhoneNumber : '-'}</td>
             </tr>
           ))}
         </tbody>

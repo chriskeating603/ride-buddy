@@ -14,17 +14,10 @@ const MessageListener: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   
   useEffect(() => {
-    // const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
-    // // const socketURL = process.env.URL
-    // // const socketURL = process.env.NODE_ENV === 'production' ? 'https://ride-buddy-listener-1b976fe0b164.herokuapp.com/' : 'http://localhost:4000';
-    // const socket = io(socketURL, {
-    //   transports: ['websocket', 'polling'],
-    // });
-    const socket = io('https://ride-buddy-listener-1b976fe0b164.herokuapp.com' || 'http://localhost:4000', {
+    const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
+    const socket = io(socketURL || 'http://localhost:4000'  , {
       transports: ['websocket', 'polling'],
     });
-
-    console.log('socket', socket);
 
     socket.emit('client-ready');
     socket.on('new-message', function(message: Message) {
@@ -42,7 +35,7 @@ const MessageListener: React.FC = () => {
 
   return (
     <div>
-      {/* <h2>Messages from Twilio</h2>
+      <h2>Messages from Twilio</h2>
       <ul>
         {messages.map((message, index) => (
           <li key={index}>
@@ -51,7 +44,7 @@ const MessageListener: React.FC = () => {
             Phone Number: {message.phoneNumber}
           </li>
         ))}
-      </ul> */}
+      </ul>
     </div>
   );
 }
