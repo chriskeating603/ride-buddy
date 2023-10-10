@@ -30,8 +30,10 @@ const TimeSlotsTable: React.FC<TimeSlotsTableProps> = ({
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>(initialTimeSlots);
   useEffect(() => {
     console.log('PreviousPostings: ', Math.floor(Date.now() / 1000));
-    const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
-    const socket = io(socketURL || 'http://localhost:4000')  
+    // const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
+    const socketURL = process.env.REMOTE_SERVER;
+    const socket = io(socketURL)
+      // || 'http://localhost:4001')  
     socket.on('new-message', (message: { slotId: number, claimedName: string, phoneNumber: string }) => {
       setTimeSlots(prevSlots => {
         const index = prevSlots.findIndex(slot => slot.requestId === message.slotId);

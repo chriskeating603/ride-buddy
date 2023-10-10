@@ -90,6 +90,7 @@ model AvailabilityPosting {
   availabilityEnd DateTime
   duration Int // length of each slot in minutes
   phoneNumbers String
+  timezone String?
   category String?
   participantCount Int?
   title String?
@@ -114,6 +115,7 @@ model Timeslot {
   createdAt DateTime @default(now())
   startTime DateTime
   endTime DateTime
+  timezone String?
   orderedId Int?
   phoneNumbersOfferedTo String?
   // we can set up a listener for this field so that when this is updated, we can send out a text saying something like, this slot has now been claimed3

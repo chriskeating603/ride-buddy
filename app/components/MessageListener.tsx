@@ -14,8 +14,13 @@ const MessageListener: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   
   useEffect(() => {
-    const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
-    const socket = io(socketURL || 'http://localhost:4000'  , {
+    console.log('MessageListener mounted');
+    // const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
+    // console.log('env', process.env.NODE_ENV);
+    const socketURL = process.env.REMOTE_SERVER;    
+    const socket = io(socketURL 
+       || 'http://localhost:4000'  
+       , {
       transports: ['websocket', 'polling'],
     });
 
@@ -25,7 +30,7 @@ const MessageListener: React.FC = () => {
       setMessages(prevMessages => [...prevMessages, message]);
     });
     socket.on('connect_error', (error: any) => {
-      console.error('Connection Error:', error);
+      console.error('Connection Error');
     });
     
     return () => {

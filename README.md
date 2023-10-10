@@ -1,22 +1,13 @@
-https://youtu.be/c_-b_isI4vg?si=ELBUeI8H7oLSQaNe&t=2072
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
 To Do - V2
 - reset form on submit click
-- re-render table whenever slotClaimedPhoneNumber is updated 
+- update the order of the id for new timeslots
 - have a think about time zones - to start, I think we will do either EST or PST, but longer term, I want to think about how I could handle this in a more sophisticated way
+- update outbound text times
+- re-render table whenever slotClaimedPhoneNumber is updated 
 - show all past tables for the user, ordered by when the request was sent
-- add an invite message after the claimed time slot is complete, and to get feedback on the product
 
 To Do - V3
+- add an invite message after the claimed time slot is complete, and to get feedback on the product
 - make invite visible on mobile
 - if modal is open (login, invite, burger menu), click elsewhere on page closes modal
 - automatically login when you sign up
@@ -43,3 +34,14 @@ Done
 - invite functionality
 - switch out MongoDB for MySQL
 - update time zones in the texts
+
+https://youtu.be/c_-b_isI4vg?si=ELBUeI8H7oLSQaNe&t=2072
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
