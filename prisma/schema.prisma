@@ -1,7 +1,12 @@
+// datasource db {
+//   provider     = "mysql"
+//   url          = env("DATABASE_URL")
+//   // relationMode = "prisma"
+// }
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("DATABASE_URL")
 }
 
 generator client {
@@ -52,8 +57,7 @@ model List {
   id String @id @default(uuid())
   type String? // favorites, friends, family, work, etc
   name String?
-  phoneNumberList String
-  
+  phoneNumberList String @db.VarChar(1000)
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@index([userId])
@@ -157,3 +161,163 @@ model Timeslot {
 //   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 //   timeslot Timeslot @relation(fields: [timeslotId], references: [id], onDelete: Cascade)
 // }
+
+// datasource db {
+//   provider     = "mysql"
+//   url          = env("DATABASE_URL")
+//   relationMode = "prisma"
+// }
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// model User {
+//   id String @id @default(uuid())
+//   email String @unique // include with country code (without + sign) and area code
+//   name String
+//   image String?
+//   hashedPassword String? // not sure how to handle if user signs up with Google Auth
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   invite Invite[]
+//   list List[]
+//   availabilityPosting AvailabilityPosting[]
+//   timeslot Timeslot[]
+//   //  @map("_id") 
+//   // phoneNumber String @unique // include with country code (without + sign) and area code
+//   // phoneVerified DateTime? // verified on Twilio
+//   // countryCode String
+//   // favoriteIds String[] 
+//   // reservation Reservation[]
+// }
+
+// model Invite {
+//   id String @id @default(uuid())
+//   name String?
+//   phoneNumber String?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   userId String
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   @@index([userId])
+
+//   // phoneNumber String @unique // include with country code (without + sign) and area code
+//   // phoneVerified DateTime? // verified on Twilio
+//   // email String? @unique // include with country code (without + sign) and area code
+//   // image String?
+//   // hashedPassword String? // not sure how to handle if user signs up with Google Auth
+//   // countryCode String
+//   // favoriteIds String[] 
+// }
+
+// model List {
+//   id String @id @default(uuid())
+//   type String? // favorites, friends, family, work, etc
+//   name String?
+//   phoneNumberList String
+  
+//   userId String
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   @@index([userId])
+  
+//   // provider String
+//   // providerAccountId String
+//   // refresh_token String? @db.String
+//   // access_token String?
+//   // expires_at Int?
+//   // token_type String?
+//   // scope String?
+//   // id_token String?
+//   // session_state String?
+// // ????  @@unique([ provider, providerAccountId])
+//   // timeslot Timeslot[]
+//   // listItems ListItem[]
+// }
+
+// // model ListItem {
+// //   id String @id @default(uuid())
+// //   userId String 
+// //   listId String 
+// //   phoneNumber String
+// //   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+// //   list List @relation(fields: [listId], references: [id])
+// //   reservations Reservation[]
+// // }
+
+// model AvailabilityPosting {
+//   id String @id @default(uuid())
+//   email String?
+//   createdAt DateTime @default(now())
+//   availabilityStart DateTime
+//   availabilityEnd DateTime
+//   duration Int // length of each slot in minutes
+//   phoneNumbers String
+//   timezone String?
+//   category String?
+//   participantCount Int?
+//   title String?
+//   PricePerSlot Int?
+  
+//   userId String
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade) 
+//   @@index([userId])
+
+//   timeslot Timeslot []
+  
+//   // startTime DateTim
+//   // listId String 
+//   // SlotLengthInMin Int
+//   // list List @relation(fields: [listId], references: [id])
+// }
+
+// model Timeslot {
+//   // id String @id @default(uuid())
+//   id Int @id @default(autoincrement())
+//   email String?
+//   createdAt DateTime @default(now())
+//   startTime DateTime
+//   endTime DateTime
+//   timezone String?
+//   orderedId Int?
+//   phoneNumbersOfferedTo String?
+//   // we can set up a listener for this field so that when this is updated, we can send out a text saying something like, this slot has now been claimed3
+//   claimedAt DateTime? // if claimed, then this is the time it was claimed
+//   claimedUserPhoneId String? // if claimed, then this is the user who claimed it
+//   claimedUserPhoneNumber String? // if claimed, then this is the user who claimed it
+  
+//   userId String
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade) 
+//   @@index([userId])
+
+//   availabilityPostingId String 
+//   availabilityPosting AvailabilityPosting @relation(fields: [availabilityPostingId], references: [id], onDelete: Cascade)
+//   @@index([availabilityPostingId])
+
+//   // duration Int // length of each slot in minutes
+//   // phoneNumbers String
+//   // category String?
+//   // participantCount Int?
+//   // title String?
+//   // PricePerSlot Int?
+//   // startTime DateTim
+//   // listId String 
+//   // SlotLengthInMin Int
+//   // list List @relation(fields: [listId], references: [id])
+//   // reservation Reservation []
+// }
+
+// // model Reservation {
+// //   id String @id @default(uuid())
+// //   createdAt DateTime @default(now())
+// //   timeslotId String 
+// //   // listItemId String
+// //   userId String 
+// //   callerNumber String 
+// //   paid Boolean @default(false)
+// //   price Int
+// //   // isCallerAlreadyUser Boolean @default(false)s
+// //   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+// //   timeslot Timeslot @relation(fields: [timeslotId], references: [id], onDelete: Cascade)
+// // }

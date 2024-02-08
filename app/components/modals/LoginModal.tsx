@@ -62,7 +62,7 @@ const LoginModal = () => {
         <div className="flex flex-col gap-4">
             <Heading 
             title="Log into Chat Signal"
-            subtitle='Connect with your friends while you drive, do laundry, or have a few idle minutes.'
+            subtitle='Connect with your friends while you drive or have a few free minutes.'
             center={true}
             />
             <Input id='email' label='Phone Number' disabled={isLoading} register={register} errors={errors} required />
@@ -86,11 +86,11 @@ const LoginModal = () => {
 
             <div className='justify-center flex flex-row items-center gap-2'>
                 <div className='py-4'>
-                    First time using Chat Signal?
+                    New user?
                 </div> 
                 <div onClick={onToggle}
-                className='text-neutral-800 cursor-pointer hover:underline'>
-                    Create an account
+                className='text-neutral-800 cursor-pointer hover:underline font-bold text-xl underline'>
+                    Create an account here
                 </div>
             </div>
             {/* </div> */}

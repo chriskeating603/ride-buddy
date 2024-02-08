@@ -14,12 +14,6 @@ export async function POST (
     const body = await request.json();
     const { name, phoneNumber } = body;
 
-    // Object.keys(body).forEach((value: any) => {
-    //     if (!body[value]) {
-    //         return NextResponse.error(400)
-    //     }
-    // })
-
     const invite = await prisma.invite.create({
         data: {
             name,
@@ -40,7 +34,7 @@ export async function POST (
 
     try {
       await client.messages.create({
-        body: `Hey ${body.funnyName}, ${currentUser.name} is inviting you to join Chat Signal: https://ride-buddy.vercel.app/`,
+        body: `Hey ${body.funnyName}, ${currentUser.name} is inviting you to join Chat Signal: https://www.thechatsignal.com/`,
         from: twilioPhoneNumber,
         to: phoneNumber,
       });
@@ -52,10 +46,6 @@ export async function POST (
         } else {
             console.error('An unknown error occurred');
         }
-        // return { success: false, message: 'Failed to send SMS' };
     }
-
-    // console.log(invite)
     return NextResponse.json(invite)
-
 }

@@ -1,5 +1,5 @@
 // import { NextApiRequest, NextApiResponse } from 'next';
-import {sendSMS} from '@/zscrap_paper/DEPRECATED_sendSMS'
+// import {sendSMS} from '@/zscrap_paper/DEPRECATED_sendSMS'
 
 // export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 //   if (req.method === 'POST') {
@@ -15,17 +15,17 @@ import {sendSMS} from '@/zscrap_paper/DEPRECATED_sendSMS'
 
 // pages/api/send-sms.ts
 
-import { NextApiRequest, NextApiResponse } from 'next';
-// import { sendSMS } from '../../utils/sendSMS';
+// import { NextApiRequest, NextApiResponse } from 'next';
+// // import { sendSMS } from '../../utils/sendSMS';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    const { phoneNumber, message } = req.body;
+// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+//   if (req.method === 'POST') {
+//     const { phoneNumber, message } = req.body;
 
-    const result = await sendSMS(phoneNumber, message);
+//     // const result = await sendSMS(phoneNumber, message);
 
-    res.status(result.success ? 200 : 500).json(result);
-  } else {
-    res.status(405).json({ success: false, message: 'Method not allowed' });
-  }
-}
+//     res.status(result.success ? 200 : 500).json(result);
+//   } else {
+//     res.status(405).json({ success: false, message: 'Method not allowed' });
+//   }
+// }

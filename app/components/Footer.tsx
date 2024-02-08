@@ -15,13 +15,13 @@ const Footer = () => {
     return (
         <div className="bg-blue-500 text-white py-6 px-4 mt-10">
             <div className="text-center mb-4">
-                Made with ❤️ by Mobile Communications, Inc. (really just {" "}
+                Made with ❤️ by {" "}
                 <a 
                     href="https://www.linkedin.com/in/chriskeating-data/" 
                     className="underline hover:text-white"
                 >
                     Chris Keating
-                </a> haha)
+                </a>
             </div>
             <div className="text-center">
                 Feedback? Email me at{" "}

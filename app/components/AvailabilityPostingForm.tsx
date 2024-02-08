@@ -1,5 +1,8 @@
 'use client'
-// // AvailabilityPostingForm.tsx
+// AvailabilityPostingForm.tsx
+
+
+
 
 import { GiConfirmed } from "react-icons/gi";
 import { FieldValues, useForm } from "react-hook-form";
@@ -26,8 +29,9 @@ const AvailabilityPostingForm: React.FC<{
   const [duration, setDuration] = useState("30 minutes");
   const [isLoginModalVisible, setLoginModalVisible] = useState(false);
   const [userTimeZone, setUserTimeZone] = useState<string | null>(null);
-  const [phoneNumbers, setPhoneNumbers] = useState(["(603) 548-8033", "(646) 583-2893"]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [phoneNumbers, setPhoneNumbers] = useState(["(603) 548-8033", "(646) 583-2893"]);
+  const [phoneNumbers, setPhoneNumbers] = useState([""]);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const [timeSlots, setTimeSlots] = useState([]);
 
   const loginModal = useLoginModal();
@@ -126,10 +130,11 @@ const AvailabilityPostingForm: React.FC<{
       availabilityEnd: utcEndTimestamp,
       duration: parseInt(duration.split(" ")[0], 10),
       phoneNumbers: JSON.stringify(phoneNumbers),
-      
+
     };
 
-    setIsLoading(true);
+    setIsLoading(true); // Set loading state to true
+
     axios
       .post('/api/create_listing', formData)
       .then((response) => {
@@ -144,12 +149,12 @@ const AvailabilityPostingForm: React.FC<{
         toast.error("Please try again", err);
       })
       .finally(() => {
-        setIsLoading(false);
+        setIsLoading(false); // Set loading state to false when the request is complete
       });
   };
 
   return (
-    <div onClick={handleFormClick} className="border p-4 rounded-md shadow-sm hover:shadow-md transition cursor-pointer sm:m-32 lg:m-32 md:m-32 mt-24">
+    <div onClick={handleFormClick} className="border p-4 rounded-md shadow-sm hover:shadow-md transition cursor-pointer sm:m-12 lg:m-12 md:m-8 mt-8">
       {/* Start Date Picker */}
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -173,130 +178,138 @@ const AvailabilityPostingForm: React.FC<{
             className="border rounded-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-32"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* End Date Picker */}
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          End Date
-        </label>
-        <DatePicker
-          selected={endDate}
-          onChange={date => setEndDate(date)}
-          className="border rounded-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-64"
-        />
-      </div>
-
-      {/* End Time */}
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          End Time
-        </label>
-        <div className="flex items-start">
-          <input
-            type="time"
-            className="border rounded-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-32"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          How long for each call?
-        </label>
-        <div className="flex flex-col items-start">
-          <label className="inline-flex items-center mb-2">
-            <input
-              type="radio"
-              className="form-radio h-5 w-5 text-blue-600"
-              value="15 minutes"
-              checked={duration === "15 minutes"}
-              onChange={() => setDuration("15 minutes")}
             />
-            <span className="ml-2">15 minutes</span>
+          </div>
+        </div>
+  
+        {/* End Date Picker */}
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            End Date
           </label>
-
-                     <label className="inline-flex items-center mb-2">
-             <input
-               type="radio"
-               className="form-radio h-5 w-5 text-blue-600"
-               value="30 minutes"
-               checked={duration === "30 minutes"}
-               onChange={() => setDuration("30 minutes")}
-             />
-             <span className="ml-2">30 minutes</span>
-           </label>
-           <label className="inline-flex items-center mb-2">
-             <input
-               type="radio"
-               className="form-radio h-5 w-5 text-blue-600"
-               value="45 minutes"
-               checked={duration === "45 minutes"}
-               onChange={() => setDuration("45 minutes")}
-             />
-             <span className="ml-2">45 minutes</span>
-           </label>
-           <label className="inline-flex items-center mb-2">
-             <input
-               type="radio"
-               className="form-radio h-5 w-5 text-blue-600"
-               value="60 minutes"
-               checked={duration === "60 minutes"}
-               onChange={() => setDuration("60 minutes")}
-             />
-             <span className="ml-2">60 minutes</span>
-           </label>
-          {/* Add other duration options as needed */}
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            className="border rounded-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-64"
+          />
         </div>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          Add Your Buddies Phone Numbers
-        </label>
-        {phoneNumbers.map((phoneNumber, index) => (
-          <div className="flex items-center gap-2 mb-2 " key={index}>
+  
+        {/* End Time */}
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            End Time
+          </label>
+          <div className="flex items-start">
             <input
-              type="text"
-              className="border rounded-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-64 "
-              placeholder="(___) ___-____"
-              value={phoneNumber}
-              onChange={(e) => handlePhoneNumberChange(index, e.target.value)}
+              type="time"
+              className="border rounded-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-32"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
             />
           </div>
-        ))}
-        <div className="ml-2 ">
-          <button
-            type="button"
-            className="p-2 bg-white border border-blue-600 rounded-full text-blue-600 w-48"
-            onClick={handleAddPhoneNumber}
-          >
-            Add Another #
-          </button>
+        </div>
+  
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            How long for each call?
+          </label>
+          <div className="flex flex-col items-start">
+            <label className="inline-flex items-center mb-2">
+              <input
+                type="radio"
+                className="form-radio h-5 w-5 text-blue-600"
+                value="15 minutes"
+                checked={duration === "15 minutes"}
+                onChange={() => setDuration("15 minutes")}
+              />
+              <span className="ml-2">15 minutes</span>
+            </label>
+  
+            <label className="inline-flex items-center mb-2">
+              <input
+                type="radio"
+                className="form-radio h-5 w-5 text-blue-600"
+                value="30 minutes"
+                checked={duration === "30 minutes"}
+                onChange={() => setDuration("30 minutes")}
+              />
+              <span className="ml-2">30 minutes</span>
+            </label>
+            <label className="inline-flex items-center mb-2">
+              <input
+                type="radio"
+                className="form-radio h-5 w-5 text-blue-600"
+                value="45 minutes"
+                checked={duration === "45 minutes"}
+                onChange={() => setDuration("45 minutes")}
+              />
+              <span className="ml-2">45 minutes</span>
+            </label>
+            <label className="inline-flex items-center mb-2">
+              <input
+                type="radio"
+                className="form-radio h-5 w-5 text-blue-600"
+                value="60 minutes"
+                checked={duration === "60 minutes"}
+                onChange={() => setDuration("60 minutes")}
+              />
+              <span className="ml-2">60 minutes</span>
+            </label>
+            {/* Add other duration options as needed */}
+          </div>
+        </div>
+  
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Add Your Buddy&apos;s Phone Numbers
+          </label>
+          {phoneNumbers.map((phoneNumber, index) => (
+            <div className="flex items-center gap-2 mb-2 " key={index}>
+              <input
+                type="tel" // Change the input type to "tel"
+                className="border rounded-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-64 "
+                placeholder="(___) ___-____"
+                value={phoneNumber}
+                onChange={(e) => handlePhoneNumberChange(index, e.target.value)}
+              />
+            </div>
+          ))}
+          <div className="ml-2 ">
+            <button
+              type="button"
+              className="p-2 bg-white border border-blue-600 rounded-full text-blue-600 w-48"
+              onClick={handleAddPhoneNumber}
+            >
+              Add Another #
+            </button>
+          </div>
+        </div>
+  
+        <div className="flex items-center justify-center mt-6">
+        <button
+  type="button"
+  className={`py-2 px-4 rounded-full text-white text-lg font-semibold flex items-center gap-2 ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0115fc]'}`}
+  onClick={handleSubmit(onSubmit)}
+  disabled={isLoading || phoneNumbers.every(phoneNumber => phoneNumber === "")}
+>
+  {isLoading ? (
+    <>
+      <span>Sending invites...</span> {/* Display a loading message */}
+    </>
+  ) : (
+    <>
+      Submit
+      <div className="p-2 bg-[#0115fc] rounded-full text-white">
+        <GiConfirmed size={18} />
+      </div>
+    </>
+  )}
+</button>
+
+          
         </div>
       </div>
-
-      <div className="flex items-center justify-center mt-6">
-        <button
-          type="button"
-          className="py-2 px-4 bg-[#0115fc] rounded-full text-white text-lg font-semibold flex items-center gap-2"
-          onClick={handleSubmit(onSubmit)}
-          disabled={phoneNumbers.every(phoneNumber => phoneNumber === "")}
-        >
-          Submit
-          <div className="p-2 bg-[#0115fc] rounded-full text-white">
-            <GiConfirmed size={18} />
-          </div>
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export default AvailabilityPostingForm;
-
-
+    );
+  };
+  
+  export default AvailabilityPostingForm;

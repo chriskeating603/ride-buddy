@@ -14,7 +14,6 @@ const socketURL = process.env.REMOTE_SERVER
 // const socketURL = process.env.NODE_ENV === 'production' ? process.env.REMOTE_SERVER : process.env.LOCAL_SERVER;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log("Started process X at", new Date().toISOString());
   // console.log("Socket URL:", socketURL);
   // console.log('env', process.env.NODE_ENV)
   if (req.method !== 'POST') {
@@ -27,6 +26,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const timeslotClaimedName = incomingMessage.replace(/[^a-zA-Z\s]/g, '').trim();
 
   if (isNaN(timeslotId)) {
+    console.error("Invalid timeslot ID:", incomingMessage);
+    return res.status(200).send("Invalid timeslot ID");
+  }
+
+  if (timeslotId === 0) {
+    await twilioClient.messages.create({
+      body: `You've been told to kick rocks by ${timeslotClaimedName} unfortunately (or fortunately if they're annoying and you sent them your availability out of obligation).`,
+      from: twilioPhoneNumber,
+      to: '6035488033',
+    });
     console.error("Invalid timeslot ID:", incomingMessage);
     return res.status(200).send("Invalid timeslot ID");
   }

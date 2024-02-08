@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import AvailabilityPostingForm from './AvailabilityPostingForm';
 import PreviousPostings from './PreviousPostings';
+import AppDescription from './AppDescription';
 
 const FormAndPostings: React.FC<{
   currentUser: any;
@@ -29,6 +30,8 @@ const FormAndPostings: React.FC<{
 
   return (
     <div>
+    {/* <div className="border p-4 rounded-md shadow-sm hover:shadow-md transition cursor-pointer sm:m-32 lg:m-32 md:m-32 mt-24"> */}
+      {/* <AppDescription /> */}
       <AvailabilityPostingForm
         handleFormSubmit={handleFormSubmit}
         setRequestId={handleSetRequestId} 

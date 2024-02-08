@@ -50,7 +50,7 @@ const Search = () => {
                 text-center
                 items-center gap-3
                 ">
-                    Add Your Buddies Phone Numbers
+                    Add Your Buddy&apos;s Phone Numbers
                 </div>
                 <div className="text-sm pl-6 pr-2 text-gray-600 flex flex-row items-center gap-3">
                 Send Invites to This List

@@ -11,76 +11,11 @@ import toast from "react-hot-toast";
 import { SubmitHandler } from "react-hook-form";
 import { on } from "events";
 import { useRouter } from "next/navigation"; // not next/router
-import {sendSMS} from '@/zscrap_paper/DEPRECATED_sendSMS';
-
-
 
 enum STEPS {
     FUNNY_NAME = 0,
     PHONE_NUMBER = 1
 }
-
-    // figure out the next post for inviting a friend
-    // or should i just skip as a part of the mvp?
-    // setIsLoading(true)
-    // signIn('credentials', {
-    //     ...data,
-    //     redirect: false,
-    // }).then((callback) => { 
-    //     setIsLoading(false)
-    //     if(callback?.ok) {
-    //         toast.success('Logged in successfully')
-    //         router.refresh()
-    //         loginModal.onClose()
-    //     }
-    //     if (callback?.error) {
-    //         toast.error(callback.error)
-    //     }
-    // })
-
-    // export default function Home() {
-    //     const [phoneNumber, setPhoneNumber] = useState('');
-    //     const [message, setMessage] = useState('');
-    //     const [response, setResponse] = useState('');
-      
-    //     const handleSendSMS = async () => {
-    //       try {
-    //         const response = await fetch('/api/send-sms', {
-    //           method: 'POST',
-    //           headers: {
-    //             'Content-Type': 'application/json',
-    //           },
-    //           body: JSON.stringify({ phoneNumber, message }),
-    //         });
-      
-    //         const data = await response.json();
-    //         setResponse(data.message);
-    //       } catch (error) {
-    //         console.error('Error sending SMS:', error);
-    //       }
-    //     };
-      
-        // return (
-        //   <div>
-        //     <h1>Send SMS</h1>
-        //     <input
-        //       type="text"
-        //       placeholder="Phone Number"
-        //       value={phoneNumber}
-        //       onChange={(e) => setPhoneNumber(e.target.value)}
-        //     />
-        //     <input
-        //       type="text"
-        //       placeholder="Message"
-        //       value={message}
-        //       onChange={(e) => setMessage(e.target.value)}
-        //     />
-        //     <button onClick={handleSendSMS}>Submit</button>
-        //     {response && <p>{response}</p>}
-        //   </div>
-        // );
-    //   }
-
 
 const InviteBuddiesModal = () => {
     const router = useRouter()
@@ -98,7 +33,6 @@ const InviteBuddiesModal = () => {
             funnyName: '',
             phoneNumber: '',
         },
-    
     })
 
     const onBack = () => {

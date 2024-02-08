@@ -19,6 +19,7 @@ import MessageListener from "./components/MessageListener.tsx"
 import PreviousPostings from "./components/PreviousPostings.tsx"
 import FormAndPostings from "./components/FormAndPostings.tsx"
 import Footer from "./components/Footer.tsx"
+import AppDescription from "./components/AppDescription.tsx"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -54,10 +55,11 @@ export default async function RootLayout({
           <div className="
           p-1">
             {/* <Search /> */}
+            <AppDescription />
             <FormAndPostings currentUser={currentUser}/>
             {/* <AvailabilityPostingForm />
             <PreviousPostings /> */}
-            <MessageListener />
+            {/* <MessageListener /> */}
             {/* <Dates />
             <Timeslots /> */}
             {/* {children} */}
